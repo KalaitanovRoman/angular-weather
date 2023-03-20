@@ -1,0 +1,8 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" class="bumz-auth">
+    <input formControlName="city" placeholder="Введите город" type="text" />
+</form>
+
+<ng-container *ngIf="weatherData$ | async as weatherData">
+    <h1>{{ weatherData.city.name }}</h1>
+    <!--http://openweathermap.org/img/wn/10d@2x.png-->
+</ng-container>
