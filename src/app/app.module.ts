@@ -7,17 +7,17 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 
 import { WeatherService } from '@core/services/weather.service';
+import { WeatherState } from '@core/store/weather.state';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { SearchComponent } from './search/search.component';
-import { WeatherState } from './search/store/weather.state';
-import { WeatherItemComponent } from './weather-item/weather-item.component';
+import { WeatherItemComponent } from './weather/components/weather-item/weather-item.component';
+import { WeatherComponent } from './weather/weather.component';
 
 
 @NgModule({
-    declarations: [AppComponent, NotFoundComponent, SearchComponent, WeatherItemComponent],
+    declarations: [AppComponent, NotFoundComponent, WeatherComponent, WeatherItemComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

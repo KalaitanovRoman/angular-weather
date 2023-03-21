@@ -7,27 +7,23 @@ import { Observable } from 'rxjs';
 
 import { Store } from '@ngxs/store';
 
-import { SubscriberComponent } from '@core/classes/subscriber.class';
 import { IWeather } from '@core/interfaces/weather.interface';
-
-import { WeatherPageActions } from './store/weather.actions';
-import { WeatherState } from './store/weather.state';
+import { WeatherPageActions } from '@core/store/weather.actions';
+import { WeatherState } from '@core/store/weather.state';
 
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './search.component.html',
-    styleUrls: ['./search.component.scss'],
+    selector: 'app-weather',
+    templateUrl: './weather.component.html',
+    styleUrls: ['./weather.component.scss'],
 })
-export class SearchComponent extends SubscriberComponent implements OnInit {
+export class WeatherComponent implements OnInit {
     public form: FormGroup;
     public error$: Observable<boolean>;
     public weatherData$: Observable<IWeather | null>;
 
     constructor(protected _store: Store, private _route: ActivatedRoute, private _router: Router) {
-        super();
-
-        this.weatherData$ = _store.select(WeatherState.getWeatherList);
+        this.weatherData$ = _store.select(WeatherState.getWeatherData);
         this.error$ = _store.select(WeatherState.checkError);
     }
 

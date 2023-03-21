@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -27,10 +28,10 @@ export class WeatherStateModel {
 })
 @Injectable({ providedIn: 'root' })
 export class WeatherState {
-    constructor(private _service: WeatherService) {}
+    constructor(private _service: WeatherService, private _titleService: Title) {}
 
     @Selector()
-    static getWeatherList(state: WeatherStateModel) {
+    static getWeatherData(state: WeatherStateModel) {
         return state.weatherData;
     }
 
@@ -40,13 +41,15 @@ export class WeatherState {
     }
 
     @Action(WeatherPageActions.GetWeather)
-    initState(ctx: StateContext<WeatherStateModel>, { payload }: WeatherPageActions.GetWeather) {
-        return this._service.getWeatherList(payload.city).pipe(
+    getWeatherData(ctx: StateContext<WeatherStateModel>, { payload }: WeatherPageActions.GetWeather) {
+        return this._service.getWeatherData(payload.city).pipe(
             tap(response => {
                 const weatherData = {
                     ...response,
                     list: response.list.filter(item => item.dt_txt.includes('12:00:00')),
                 };
+
+                this._titleService.setTitle(`Погода в городе - ${weatherData.city.name}`);
 
                 ctx.patchState({
                     weatherData,

@@ -1,5 +1,6 @@
 <div class="wrapper">
     <p>Узнайте прогноз погоды в своем городе на 5 дней</p>
+
     <form (ngSubmit)="onSubmit()" [formGroup]="form" class="weather-search">
         <input formControlName="city" placeholder="Введите город" type="text" />
         <button>Поиск</button>
