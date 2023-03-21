@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -13,9 +13,11 @@ import { AppComponent } from './app.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SearchComponent } from './search/search.component';
 import { WeatherState } from './search/store/weather.state';
+import { WeatherItemComponent } from './weather-item/weather-item.component';
+
 
 @NgModule({
-    declarations: [AppComponent, NotFoundComponent, SearchComponent],
+    declarations: [AppComponent, NotFoundComponent, SearchComponent, WeatherItemComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -25,7 +27,7 @@ import { WeatherState } from './search/store/weather.state';
         NgxsReduxDevtoolsPluginModule.forRoot(),
     ],
     exports: [HttpClientModule],
-    providers: [WeatherService],
+    providers: [WeatherService, { provide: LOCALE_ID, useValue: 'ru' }],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

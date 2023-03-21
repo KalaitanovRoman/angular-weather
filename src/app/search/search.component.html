@@ -1,8 +1,27 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="form" class="bumz-auth">
-    <input formControlName="city" placeholder="Введите город" type="text" />
-</form>
+<div class="wrapper">
+    <p>Узнайте прогноз погоды в своем городе на 5 дней</p>
+    <form (ngSubmit)="onSubmit()" [formGroup]="form" class="weather-search">
+        <input formControlName="city" placeholder="Введите город" type="text" />
+        <button>Поиск</button>
+    </form>
 
-<ng-container *ngIf="weatherData$ | async as weatherData">
-    <h1>{{ weatherData.city.name }}</h1>
-    <!--http://openweathermap.org/img/wn/10d@2x.png-->
-</ng-container>
+    <ng-container *ngIf="!(error$ | async); else error">
+        <ng-container *ngIf="weatherData$ | async as weatherData">
+            <h1>{{ weatherData.city.name }}</h1>
+
+            <div [data]="weatherData.list[0]" [isToday]="true" app-weather-item class="weather-item today"></div>
+
+            <div class="weather-list">
+                <div
+                    *ngFor="let data of weatherData.list.slice(1)"
+                    [data]="data"
+                    app-weather-item
+                    class="weather-item"></div>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-template #error>
+        <p>Такой город не найден</p>
+    </ng-template>
+</div>

@@ -1,0 +1,37 @@
+<div class="weather-item_header">
+    <div>
+        <h2>
+            <ng-container *ngIf="!isToday; else today">
+                {{ data.dt_txt | date : 'EEEE' : '' : '' | titlecase }}
+            </ng-container>
+
+            <ng-template #today>Сегодня</ng-template>
+        </h2>
+        <p class="weather-item_date">{{ data.dt_txt | date : 'dd MMMM' }}</p>
+    </div>
+    <div>
+        <img
+            alt="{{ data.weather[0].description }}"
+            src="http://openweathermap.org/img/wn/{{ data.weather[0].icon }}@2x.png" />
+        <div>
+            <p>Днём</p>
+            <p>
+                <span *ngIf="data.main.temp > 0">+</span>
+                {{ data.main.temp | number : '1.0-0' }}&#8451;
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="weather-item_desc">
+    <p class="weather-item_condition">{{ data.weather[0].description }}</p>
+    <p>
+        Ветер: <span>{{ data.wind.speed | number : '1.0-0' }}м/с</span>
+    </p>
+    <p>
+        Влажность: <span>{{ data.main.humidity | number : '1.0-0' }}%</span>
+    </p>
+    <p>
+        Ощущается как: <span>{{ data.main.feelsLike | number : '1.0-0' }}&#8451;</span>
+    </p>
+</div>

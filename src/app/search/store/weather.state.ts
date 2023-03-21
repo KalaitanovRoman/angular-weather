@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
@@ -9,14 +10,15 @@ import { WeatherService } from '@core/services/weather.service';
 
 import { WeatherPageActions } from './weather.actions';
 
+
 const defaultsState = {
-    isLoading: false,
-    weatherList: null,
+    error: false,
+    weatherData: null,
 };
 
 export class WeatherStateModel {
-    isLoading: boolean;
-    weatherList: IWeather | null;
+    error: boolean;
+    weatherData: IWeather | null;
 }
 
 @State<WeatherStateModel>({
@@ -28,30 +30,35 @@ export class WeatherState {
     constructor(private _service: WeatherService) {}
 
     @Selector()
-    static getStatus(state: WeatherStateModel) {
-        return state.isLoading;
+    static getWeatherList(state: WeatherStateModel) {
+        return state.weatherData;
     }
 
     @Selector()
-    static getWeatherList(state: WeatherStateModel) {
-        return state.weatherList;
+    static checkError(state: WeatherStateModel) {
+        return state.error;
     }
 
     @Action(WeatherPageActions.GetWeather)
     initState(ctx: StateContext<WeatherStateModel>, { payload }: WeatherPageActions.GetWeather) {
-        ctx.patchState({
-            isLoading: true,
-        });
-
         return this._service.getWeatherList(payload.city).pipe(
             tap(response => {
-                // return response.list.filter((item: any) => item.dt_txt.includes('12:00:00'));
+                const weatherData = {
+                    ...response,
+                    list: response.list.filter(item => item.dt_txt.includes('12:00:00')),
+                };
 
-                console.log('!!!', response);
                 ctx.patchState({
-                    weatherList: response,
-                    isLoading: false,
+                    weatherData,
+                    error: false,
                 });
+            }),
+            catchError(({ error }) => {
+                ctx.patchState({
+                    error: true,
+                });
+
+                return throwError(error.message);
             })
         );
     }

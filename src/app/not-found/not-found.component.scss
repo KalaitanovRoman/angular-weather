@@ -1,0 +1,15 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+        max-height: 400px;
+        margin: 40px 0;
+    }
+
+    a {
+        text-decoration: none;
+        border-bottom: 1px solid;
+    }
+}

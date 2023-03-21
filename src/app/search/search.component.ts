@@ -1,3 +1,4 @@
+import '@angular/common/locales/global/ru';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +13,7 @@ import { IWeather } from '@core/interfaces/weather.interface';
 import { WeatherPageActions } from './store/weather.actions';
 import { WeatherState } from './store/weather.state';
 
+
 @Component({
     selector: 'app-search',
     templateUrl: './search.component.html',
@@ -19,12 +21,14 @@ import { WeatherState } from './store/weather.state';
 })
 export class SearchComponent extends SubscriberComponent implements OnInit {
     public form: FormGroup;
+    public error$: Observable<boolean>;
     public weatherData$: Observable<IWeather | null>;
 
     constructor(protected _store: Store, private _route: ActivatedRoute, private _router: Router) {
         super();
 
         this.weatherData$ = _store.select(WeatherState.getWeatherList);
+        this.error$ = _store.select(WeatherState.checkError);
     }
 
     ngOnInit(): void {
@@ -41,6 +45,10 @@ export class SearchComponent extends SubscriberComponent implements OnInit {
 
     onSubmit() {
         const { city } = this.form.value;
+
+        if (!city) {
+            return;
+        }
 
         void this._router.navigate([], { queryParams: { city } });
 
